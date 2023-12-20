@@ -67,7 +67,7 @@ Route::controller(Product_controller::class)->group(function () {
     Route::post('/product/{id}',       'update');
     Route::post('/product',           'store')->name('product.store');
     Route::delete('/product/{id}',    'destroy');
-    Route::put('/product/img/{id}',    'image')->name('product.image');
+    Route::put('/prod-img/{id}',    'image')->name('product.image');
 
     // Joined Tables 
     Route::get('/product/category',   'proDCategory');
