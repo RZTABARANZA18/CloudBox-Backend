@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class User_request extends FormRequest
 {
@@ -30,7 +31,7 @@ class User_request extends FormRequest
             return [
                 'first_name'     =>  'required|string|max:255',
                 'last_name'      =>  'required|string|max:255',
-                'email'          =>  'required|string|email|unique:App\Models\User,email|max:255',
+                'email'          =>  ['required', Rule::unique('users')],
                 'password'       =>  'required|min:8',
             ];
         } else if (request()->routeIs('user.name')) {

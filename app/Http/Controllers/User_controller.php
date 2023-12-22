@@ -32,6 +32,17 @@ class User_controller extends Controller
         return $user;
     }
 
+    // public function store(User_request $request)
+    // {
+    //     $request->validate([
+    //         'first_name' => 'required',
+    //         'last_name' => 'required',
+    //         'email' => ['required', 'email', Rule::unique('users')],
+    //         'password' => 'required|min:8',
+
+    //     ]);
+    // }
+
     /**
      * Display the specified resource.
      */

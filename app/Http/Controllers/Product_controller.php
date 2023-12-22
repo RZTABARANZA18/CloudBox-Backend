@@ -81,7 +81,8 @@ class Product_controller extends Controller
         $product = Product_model::create($validatedData);
 
         // Return the created product
-        return $product;
+        // return $product;
+        return response()->json([$product, 201]);
     }
 
 
@@ -143,11 +144,43 @@ class Product_controller extends Controller
 
             $product->update($validatedData);
 
-            return response()->json(['message' => 'Product updated successfully huhiuhiuhiuhiuhiuhiuh', 'product' => $product], 200);
+            return response()->json(['message' => 'Product updated successfully', 'product' => $product], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to update product', 'error' => $e->getMessage()], 500);
         }
     }
+
+    // public function destroy(string $mainTableId)
+    // {
+    //     try {
+    //         // Begin a database transaction
+    //         DB::products();
+
+    //         // Retrieve related records from TableB (stock)
+    //         $relatedRecordsTableB = DB::table('stock')->where('prod_id', $mainTableId)->get();
+
+    //         // Check if there are any related records in the stock table
+    //         if ($relatedRecordsTableB->isNotEmpty()) {
+    //             // Delete related records from TableB (stock)
+    //             DB::table('stock')->where('prod_id', $mainTableId)->delete();
+    //         }
+
+    //         // Perform deletion of the record from MainTable (product)
+    //         DB::table('product')->where('prod_id', $mainTableId)->delete();
+
+    //         // Commit the transaction
+    //         DB::commit();
+
+    //         // Return a success message or indicator
+    //         return ['success' => true, 'product' => 'Deletion successful'];
+    //     } catch (\Exception $e) {
+    //         // Something went wrong, rollback the transaction
+    //         DB::rollBack();
+
+    //         // Return an error message or indicator
+    //         return ['success' => false, 'product' => 'Deletion failed: ' . $e->getMessage()];
+    //     }
+    // }
 
 
 
@@ -219,17 +252,11 @@ class Product_controller extends Controller
 
     public function prodStock()
     {
-        $leftJoin = DB::table('product p')
-            ->leftJoin('stock s', 'p.prod_id', '=', 'prod_id')
+        $leftJoin = DB::table('product')
+            ->leftJoin('stock', 'product.prod_id', '=', 'stock.prod_id')
             ->select(
-                'product.prod_id',
-                'product.prod_name',
-                'product.price',
-                'product.description',
-                'product.status',
-                'product.category_id',
-                'stock.quantity', // Assuming 'quantity' column exists in 'stock' table
-                // Add other columns from 'stock' table that you need
+                'product.*',
+                'stock.quantity',
             )
             ->get();
 

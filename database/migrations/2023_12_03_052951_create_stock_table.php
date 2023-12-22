@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Product_model;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,8 +21,13 @@ return new class extends Migration
             $table->timestamps();
 
 
-            $table->foreign('prod_id')->references('prod_id')->on('product'); // Adjusted foreign key references
-            $table->foreign('account_id')->references('account_id')->on('users'); // Corrected reference to 'users' table
+            // $table->foreign('prod_id')->references('prod_id')->on('product')->onDelete('cascade');; // Adjusted foreign key references
+            // $table->foreign('account_id')->references('account_id')->on('users'); // Corrected reference to 'users' table
+        });
+
+        Schema::table('stock', function (Blueprint $table) {
+            $table->foreign('prod_id')->references('prod_id')->on((new Product_model())->getTable())->onDelete('cascade');
+            $table->foreign('account_id')->references('account_id')->on((new User())->getTable());
         });
     }
 

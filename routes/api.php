@@ -28,93 +28,95 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/login', [Authentication_controller::class, 'login'])->name('user.login');
-Route::post('/user', [User_controller::class,  'store'])->name('user.store');
+Route::post('/signup', [User_controller::class,  'store'])->name('user.store');
 
 
 
 // Route::post('/user', [User_controller::class,  'store'])->name('user.store');
 
-// Route::middleware('auth:sanctum')->group(function () {
-Route::post('/logout', [Authentication_controller::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [Authentication_controller::class, 'logout']);
 
 
-Route::controller(User_controller::class)->group(function () {
-    Route::get('/user',                 'index');
-    Route::get('/user/{id}',            'show');
-    Route::post('/name/user/{id}',      'name')->name('user.name');
-    Route::post('/email/user/{id}',     'email')->name('user.email');
-    Route::post('/password/user/{id}',  'password')->name('user.password');
-    Route::delete('/user/{id}',         'destroy');
+    Route::controller(User_controller::class)->group(function () {
+        Route::get('/user',                 'index');
+        Route::get('/user/{id}',            'show');
+        Route::post('/name/user/{id}',      'name')->name('user.name');
+        Route::post('/email/user/{id}',     'email')->name('user.email');
+        Route::post('/password/user/{id}',  'password')->name('user.password');
+        Route::delete('/user/{id}',         'destroy');
 
-    // Route::get('/userIncome/{id}',      'userOverallIncome');
-    // Route::get('/user-trans',           'userTrans');
-    // Route::get('/user/stock',           'userStocks');
+        // Route::get('/userIncome/{id}',      'userOverallIncome');
+        // Route::get('/user-trans',           'userTrans');
+        // Route::get('/user/stock',           'userStocks');
+    });
+
+    Route::controller(Stock_controller::class)->group(function () {
+        Route::get('/stock',            'index');
+        Route::get('/stock/user',       'userStock');
+        Route::get('/stock/{id}',       'show');
+        Route::put('/stock/{id}',       'update');
+        Route::post('/stock',        'store');
+        Route::delete('/stock/{id}',    'destroy');
+
+        Route::get('/sum-stock',        'sumStock');
+    });
+
+    Route::controller(Product_controller::class)->group(function () {
+        Route::get('/product',            'index');
+        Route::get('/product/{id}',       'show');
+        Route::post('/product/{id}',       'update');
+        Route::post('/product',           'store')->name('product.store');
+        Route::delete('/product/{id}',    'destroy');
+        Route::put('/product/img/{id}',    'image')->name('product.image');
+
+        // Joined Tables 
+        Route::get('/product/category',   'proDCategory');
+        Route::get('/prod-stock',      'prodStock');
+    });
+
+    Route::controller(Sales_controller::class)->group(function () {
+        Route::get('/sales',            'index');
+        Route::get('/sales/{id}',       'show');
+        Route::put('/sales/{id}',       'update');
+        Route::post('/sales',           'store');
+        Route::delete('/sales/{id}',    'destroy');
+
+        Route::get('/annual/{id}',            'annualSales');
+        Route::get('/weekly-sales',      'weeklySales');
+    });
+
+    Route::controller(Transaction_controller::class)->group(function () {
+        Route::get('/transaction',            'index');
+        Route::get('/transaction/{id}',       'show');
+        Route::put('/transaction/{id}',       'update');
+        Route::post('/transaction',           'store');
+        Route::delete('/transaction/{id}',    'destroy');
+
+        Route::get('/userTrans',             'userTrans');
+        Route::get('/transSort',             'transSort');
+        Route::get('/BalanceTrans',          'transBalance');
+        // Route::get('/transaction/user',    'userTrans');
+    });
+
+    Route::controller(Category_controller::class)->group(function () {
+        Route::get('/category',            'index');
+        Route::get('/category/{id}',       'show');
+        Route::put('/category/{id}',       'update');
+        Route::post('/category',           'store');
+        Route::delete('/category/{id}',    'destroy');
+    });
+
+    Route::controller(ActivityLog_controller::class)->group(function () {
+        Route::get('/activity',            'index');
+        Route::get('/activity/{id}',       'show');
+        Route::put('/activity/{id}',       'update');
+        Route::post('/activity',           'store');
+        Route::delete('/activity/{id}',    'destroy');
+
+        Route::get('/activity-log',       'userActivity');
+    });
 });
-
-Route::controller(Stock_controller::class)->group(function () {
-    Route::get('/stock',            'index');
-    // Route::get('/stock/sum',        'sumStock');
-    Route::get('/stock/user',       'userStock');
-    Route::get('/stock/{id}',       'show');
-    Route::put('/stock/{id}',       'update');
-    Route::post('/stock',           'store');
-    Route::delete('/stock/{id}',    'destroy');
-});
-
-Route::controller(Product_controller::class)->group(function () {
-    Route::get('/product',            'index');
-    Route::get('/product/{id}',       'show');
-    Route::post('/product/{id}',       'update');
-    Route::post('/product',           'store')->name('product.store');
-    Route::delete('/product/{id}',    'destroy');
-    Route::put('/prod-img/{id}',    'image')->name('product.image');
-
-    // Joined Tables 
-    Route::get('/product/category',   'proDCategory');
-    Route::get('/product/stock',      'prodStock');
-});
-
-Route::controller(Sales_controller::class)->group(function () {
-    Route::get('/sales',            'index');
-    Route::get('/sales/{id}',       'show');
-    Route::put('/sales/{id}',       'update');
-    Route::post('/sales',           'store');
-    Route::delete('/sales/{id}',    'destroy');
-
-    Route::get('/annual/{id}',            'annualSales');
-});
-
-Route::controller(Transaction_controller::class)->group(function () {
-    Route::get('/transaction',            'index');
-    Route::get('/transaction/{id}',       'show');
-    Route::put('/transaction/{id}',       'update');
-    Route::post('/transaction',           'store');
-    Route::delete('/transaction/{id}',    'destroy');
-
-    Route::get('/userTrans',             'userTrans');
-    Route::get('/transSort',             'transSort');
-    Route::get('/BalanceTrans',          'transBalance');
-    // Route::get('/transaction/user',    'userTrans');
-});
-
-Route::controller(Category_controller::class)->group(function () {
-    Route::get('/category',            'index');
-    Route::get('/category/{id}',       'show');
-    Route::put('/category/{id}',       'update');
-    Route::post('/category',           'store');
-    Route::delete('/category/{id}',    'destroy');
-});
-
-Route::controller(ActivityLog_controller::class)->group(function () {
-    Route::get('/activity',            'index');
-    Route::get('/activity/{id}',       'show');
-    Route::put('/activity/{id}',       'update');
-    Route::post('/activity',           'store');
-    Route::delete('/activity/{id}',    'destroy');
-
-    Route::get('/activity-log',       'userActivity');
-});
-// });
 
 
 

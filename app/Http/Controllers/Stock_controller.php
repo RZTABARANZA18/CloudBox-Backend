@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Stock_request;
-use App\Models\Stock_Model;
+use App\Models\Stock_model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +14,7 @@ class Stock_controller extends Controller
      */
     public function index()
     {
-        return Stock_Model::all();
+        return Stock_model::all();
     }
 
     /**
@@ -22,7 +22,7 @@ class Stock_controller extends Controller
      */
     public function store(Stock_request $request)
     {
-        $stock = Stock_Model::create($request->validated());
+        $stock = Stock_model::create($request->validated());
 
         return $stock;
     }
@@ -32,7 +32,7 @@ class Stock_controller extends Controller
      */
     public function show(string $id)
     {
-        $stock = Stock_Model::findOrFail($id);
+        $stock = Stock_model::findOrFail($id);
 
         return $stock;
     }
@@ -45,7 +45,7 @@ class Stock_controller extends Controller
     {
         $validated = $request->validated();
 
-        $stock = Stock_Model::findOrFail($id)->update($validated);
+        $stock = Stock_model::findOrFail($id)->update($validated);
 
         return $stock;
     }
@@ -55,7 +55,7 @@ class Stock_controller extends Controller
      */
     public function destroy(string $id)
     {
-        $stock = Stock_Model::findOrFail($id);
+        $stock = Stock_model::findOrFail($id);
 
         $stock->delete();
 
@@ -72,12 +72,12 @@ class Stock_controller extends Controller
         return $leftJoin;
     }
 
-    // public function sumStock()
-    // {
-    //     // Sum the 'stock' column for all products
-    //     $overallStock = Stock_Model::sum('stock');
+    public function sumStock()
+    {
+        // Sum the 'stock' column for all products
+        $totalQuantity = DB::table('stock')->sum('quantity');
 
-    //     // Now, $overallStock contains the sum of the 'stock' column for all products
-    //     return $overallStock;
-    // }
+        // Now, $overallStock contains the sum of the 'stock' column for all products
+        return $totalQuantity;
+    }
 }
